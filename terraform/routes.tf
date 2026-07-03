@@ -1,6 +1,6 @@
-resource "aws_apigatewayv2_route" "hello" {
+resource "aws_apigatewayv2_route" "shows_by_name" {
   api_id    = aws_apigatewayv2_api.api.id
-  route_key = "GET /hello"
+  route_key = "GET /shows/{name}"
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 

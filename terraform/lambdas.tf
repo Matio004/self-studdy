@@ -7,6 +7,16 @@ resource "aws_lambda_function" "hello" {
   role    = aws_iam_role.lambda_role.arn
   handler = "hello_lambda.lambda_handler"
   runtime = "python3.12"
+
+  layers = [
+    aws_lambda_layer_version.python_dependencies.arn
+  ]
+
+  environment {
+    variables = {
+      TABLE_NAME = aws_dynamodb_table.series_by_name.name
+    }
+  }
 }
 
 resource "aws_lambda_function" "users" {
