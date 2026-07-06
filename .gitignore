@@ -22,3 +22,4 @@ terraform.rc
 .history/
 
 *.zip
+layer
