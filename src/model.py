@@ -1,8 +1,6 @@
-from datetime import date
-from typing import Optional
-from urllib import HttpUrl
+from datetime import date, datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 
 
 class Country(BaseModel):
@@ -14,7 +12,7 @@ class Network(BaseModel):
     id: int
     name: str
     country: Country | None
-    officialSite: HttpUrl | None
+    official_site: HttpUrl | None = Field(alias='officialSite')
 
 
 class Schedule(BaseModel):
@@ -29,7 +27,7 @@ class Rating(BaseModel):
 class Externals(BaseModel):
     tvrage: int | None
     thetvdb: int | None
-    imdb: str
+    imdb: str | None
 
 
 class Image(BaseModel):
@@ -46,31 +44,68 @@ class Show(BaseModel):
     url: HttpUrl
     name: str
     type: str
-    languages: str
+    language: str
     genres: list[str]
     status: str
 
-    runtime: int
-    averageRuntime: int
+    runtime: int | None = None
+    average_runtime: int | None = Field(default=None, alias='averageRuntime')
 
-    premiered: date | None
-    ended: date | None
+    premiered: date | None = None
+    ended: date | None = None
 
-    officialSite: HttpUrl | None
+    official_site: HttpUrl | None = Field(alias='officialSite')
     
     schedule: Schedule
     rating: Rating
 
     weight: int
 
-    network: Network | None
-    webChannel: Network | None
-    dvdCountry: Country | None
+    network: Network | None = None
+    web_channel: Network | None = Field(default=None, alias='webChannel')
+    dvd_country: Country | None = Field(default=None, alias='dvdCountry')
 
     externals: Externals
-    image: Image | None
+    image: Image | None = None
 
-    summary: str = Field(default='')
+    summary: str | None = ''
     updated: int
 
     links: dict[str, Link] = Field(alias='_links')
+
+
+class Season(BaseModel):
+    id: int
+    url: HttpUrl
+    number: int
+    name: str = ''
+    episode_order = int = Field(alias='episodeOrder')
+    premiere_date = date = Field(alias='premiereDate')
+    end_date = date = Field(alias='endDate')
+    network = Network | None = None
+    web_channel: Network | None = Field(default=None, alias='webChannel')
+
+    links: dict[str, Link] = Field(alias='_links')
+
+
+class Episode(BaseModel):
+    id: int
+    url: HttpUrl
+    name: str | None = ''
+
+    season: int
+    number: int
+
+    type: str
+
+    airdate: date
+    airtime: str
+    airstamp: datetime
+
+    runtime: int | None = None
+    rating: Rating
+    image: Image | None = None
+    summary: str | None = ''
+
+    links: dict[str, Link] = Field(alias='_links')
+    
