@@ -118,7 +118,7 @@ class Episode(BaseModel):
     name: str | None = ''
 
     season: int
-    number: int
+    number: int | None = 0  # todo if there are 2 specials it will breake 
 
     type: str
 
