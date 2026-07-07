@@ -5,7 +5,7 @@ resource "aws_lambda_function" "hello" {
   source_code_hash = data.archive_file.lambda_hello.output_base64sha256
 
   role    = aws_iam_role.lambda_role.arn
-  handler = "hello_lambda.lambda_handler"
+  handler = "handlers.shows"
   runtime = "python3.12"
 
   layers = [

@@ -1,6 +1,7 @@
-from datetime import date, datetime
+from datetime import datetime
+from decimal import Decimal
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, TypeAdapter
 
 
 class Country(BaseModel):
@@ -11,8 +12,8 @@ class Country(BaseModel):
 class Network(BaseModel):
     id: int
     name: str
-    country: Country | None
-    official_site: HttpUrl | None = Field(alias='officialSite')
+    country: Country | None = None
+    official_site: str | None = Field(alias='officialSite')
 
 
 class Schedule(BaseModel):
@@ -21,27 +22,27 @@ class Schedule(BaseModel):
 
 
 class Rating(BaseModel):
-    average: float | None
+    average: Decimal | None = None
 
 
 class Externals(BaseModel):
-    tvrage: int | None
-    thetvdb: int | None
-    imdb: str | None
+    tvrage: int | None = None
+    thetvdb: int | None = None
+    imdb: str | None = None
 
 
 class Image(BaseModel):
-    medium: HttpUrl | None
-    original: HttpUrl | None
+    medium: str | None = None
+    original: str | None = None
 
 
 class Link(BaseModel):
-    href: HttpUrl
-    name: str | None
+    href: str
+    name: str | None = None
 
 class Show(BaseModel):
     id: int
-    url: HttpUrl
+    url: str
     name: str
     type: str
     language: str
@@ -51,10 +52,10 @@ class Show(BaseModel):
     runtime: int | None = None
     average_runtime: int | None = Field(default=None, alias='averageRuntime')
 
-    premiered: date | None = None
-    ended: date | None = None
+    premiered: str | None = None
+    ended: str | None = None
 
-    official_site: HttpUrl | None = Field(alias='officialSite')
+    official_site: str | None = Field(alias='officialSite')
     
     schedule: Schedule
     rating: Rating
@@ -76,21 +77,24 @@ class Show(BaseModel):
 
 class Season(BaseModel):
     id: int
-    url: HttpUrl
+    url: str
     number: int
     name: str = ''
-    episode_order = int = Field(alias='episodeOrder')
-    premiere_date = date = Field(alias='premiereDate')
-    end_date = date = Field(alias='endDate')
-    network = Network | None = None
+    episode_order: int = Field(alias='episodeOrder')
+    premiere_date: str = Field(alias='premiereDate')
+    end_date: str = Field(alias='endDate')
+    network: Network | None = None
     web_channel: Network | None = Field(default=None, alias='webChannel')
 
     links: dict[str, Link] = Field(alias='_links')
 
 
+Seasons = TypeAdapter(list[Season])
+
+
 class Episode(BaseModel):
     id: int
-    url: HttpUrl
+    url: str
     name: str | None = ''
 
     season: int
@@ -98,7 +102,7 @@ class Episode(BaseModel):
 
     type: str
 
-    airdate: date
+    airdate: str
     airtime: str
     airstamp: datetime
 
@@ -109,3 +113,5 @@ class Episode(BaseModel):
 
     links: dict[str, Link] = Field(alias='_links')
     
+
+Episodes = TypeAdapter(list[Episode])
