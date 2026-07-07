@@ -16,3 +16,12 @@ resource "aws_lambda_permission" "users" {
 
   source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
+
+resource "aws_lambda_permission" "seasons" {
+  statement_id  = "AllowInovke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.seasons.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
+}

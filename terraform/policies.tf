@@ -15,7 +15,9 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
         Effect = "Allow"
         Action = [
           "dynamodb:GetItem",
-          "dynamodb:PutItem"
+          "dynamodb:PutItem",
+          "dynamodb:Query",
+          "dynamodb:BatchWriteItem"
         ]
         Resource = aws_dynamodb_table.series_by_name.arn
       }

@@ -29,3 +29,24 @@ resource "aws_lambda_function" "users" {
   handler = "users.handler"
   runtime = "python3.12"
 }
+
+resource "aws_lambda_function" "seasons" {
+  function_name = "seasons"
+
+  filename         = data.archive_file.lambda_hello.output_path
+  source_code_hash = data.archive_file.lambda_hello.output_base64sha256
+
+  role    = aws_iam_role.lambda_role.arn
+  handler = "handlers.seasons"
+  runtime = "python3.12"
+
+  layers = [
+    aws_lambda_layer_version.python_dependencies.arn
+  ]
+
+  environment {
+    variables = {
+      TABLE_NAME = aws_dynamodb_table.series_by_name.name
+    }
+  }
+}

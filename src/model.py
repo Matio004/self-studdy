@@ -1,15 +1,19 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, Field, TypeAdapter
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 
 class Country(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    
     name: str
     code: str
     timezone: str
 
 class Network(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: int
     name: str
     country: Country | None = None
@@ -17,30 +21,42 @@ class Network(BaseModel):
 
 
 class Schedule(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+    
     time: str
     days: list[str]
 
 
 class Rating(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     average: Decimal | None = None
 
 
 class Externals(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     tvrage: int | None = None
     thetvdb: int | None = None
     imdb: str | None = None
 
 
 class Image(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     medium: str | None = None
     original: str | None = None
 
 
 class Link(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     href: str
     name: str | None = None
 
 class Show(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: int
     url: str
     name: str
@@ -76,13 +92,15 @@ class Show(BaseModel):
 
 
 class Season(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: int
     url: str
     number: int
     name: str = ''
     episode_order: int = Field(alias='episodeOrder')
-    premiere_date: str = Field(alias='premiereDate')
-    end_date: str = Field(alias='endDate')
+    premiere_date: str | None = Field(None, alias='premiereDate')
+    end_date: str | None = Field(None, alias='endDate')
     network: Network | None = None
     web_channel: Network | None = Field(default=None, alias='webChannel')
 
@@ -93,6 +111,8 @@ Seasons = TypeAdapter(list[Season])
 
 
 class Episode(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     id: int
     url: str
     name: str | None = ''
