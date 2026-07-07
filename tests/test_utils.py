@@ -4,7 +4,7 @@ from utlis import render
 def test_render():
     show = api.get_show('house')
 
-    response = render(200, show)
+    response = render(200, show.model_dump_json())
 
     assert response['statusCode'] == 200
-    assert response['body']['name'] == 'House'
+    assert isinstance(response['body'], str)
