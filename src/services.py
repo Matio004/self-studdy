@@ -83,3 +83,23 @@ def get_episodes(name, season):
                     )
             return episodes
     raise ValueError('Season number out of range for this show')
+
+def delete_show(name):
+    response = table.query(
+        Key={
+            "name": name,
+        }
+    )  # todo może zwrócić tylko część, użyć 
+
+    if "Item" not in item:
+        raise KeyError('There is to show of such name.')
+    
+    with table.batch_writer() as batch:
+        for item in response['Items']:
+            batch.delete_item(
+                Key={
+                    'name': item['name'],
+                    'sk': item['sk']
+                }
+            )
+    return response['Items']

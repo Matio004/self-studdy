@@ -17,6 +17,7 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
           "dynamodb:GetItem",
           "dynamodb:PutItem",
           "dynamodb:Query",
+          "dynamodb:DeleteItem",
           "dynamodb:BatchWriteItem"
         ]
         Resource = aws_dynamodb_table.series_by_name.arn
