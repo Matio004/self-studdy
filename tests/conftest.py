@@ -1,3 +1,4 @@
+from repository import ShowRepository, SeasonRepository, EpisodeRepository
 import pytest
 import boto3
 
@@ -38,3 +39,18 @@ def show(dynamodb_table):
 @pytest.fixture
 def seasons(dynamodb_table):
     pass
+
+
+@pytest.fixture
+def show_repo(dynamodb_table):
+    yield ShowRepository(dynamodb_table)
+
+
+@pytest.fixture
+def season_repo(dynamodb_table):
+    yield SeasonRepository(dynamodb_table)
+
+
+@pytest.fixture
+def episode_repo(dynamodb_table):
+    yield EpisodeRepository(dynamodb_table)
