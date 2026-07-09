@@ -12,6 +12,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "factory-boy>=3.3.3",
+    "moto[all]>=5.2.2",
     "pytest>=9.1.1",
 ]
 

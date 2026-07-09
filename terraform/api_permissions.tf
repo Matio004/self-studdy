@@ -34,3 +34,12 @@ resource "aws_lambda_permission" "episodes" {
 
   source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
+
+resource "aws_lambda_permission" "delete_show" {
+  statement_id  = "AllowInovke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.delete_show.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
+}

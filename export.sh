@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
 rm -r layer
+
 mkdir -p "layer/python"
 
 
 uv sync
 
-cp -r .venv/lib/python3.12/site-packages/* layer/python/
+uv export --no-dev --format requirements.txt > requirements.txt
+
+uv pip --managed-python install \
+    --target layer/python \
+    -r requirements.txt

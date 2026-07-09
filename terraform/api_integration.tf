@@ -25,3 +25,10 @@ resource "aws_apigatewayv2_integration" "episodes" {
   integration_uri        = aws_lambda_function.episodes.invoke_arn
   payload_format_version = "2.0"
 }
+
+resource "aws_apigatewayv2_integration" "delete_show" {
+  api_id                 = aws_apigatewayv2_api.api.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.delete_show.invoke_arn
+  payload_format_version = "2.0"
+}

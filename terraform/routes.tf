@@ -21,3 +21,9 @@ resource "aws_apigatewayv2_route" "episodes_by_season" {
   route_key = "GET /shows/{name}/seasons/{season}"
   target    = "integrations/${aws_apigatewayv2_integration.episodes.id}"
 }
+
+resource "aws_apigatewayv2_route" "delete_show"{
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "DELETE /shows/{name}"
+  target    = "integrations/${aws_apigatewayv2_integration.delete_show.id}"
+}
