@@ -91,4 +91,4 @@ resource "aws_lambda_function" "delete_show" {
       TABLE_NAME = aws_dynamodb_table.series_by_name.name
     }
   }
-}delete_show"
+}

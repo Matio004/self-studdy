@@ -1,3 +1,4 @@
+from repository import ShowRepository, SeasonRepository, EpisodeRepository
 from boto3.dynamodb.conditions import Key
 
 import api
@@ -6,77 +7,44 @@ from model import Episodes, Show, Seasons
 
 class Shows:
     def __init__(self, table):
-        self.table = table
+        self.show_repository = ShowRepository(table)
+        self.season_repository = SeasonRepository(table)
+        self.episode_repository = EpisodeRepository(table)
 
     def get_show(self, name):
-        item = self.table.get_item(Key={"name": name, "sk": "SHOW"})
-
-        if "Item" in item:
-            return Show.model_validate(item["Item"]["data"])
-
-        show = api.get_show(name)
-
-        self.table.put_item(
-            Item={"name": show.name, "sk": "SHOW", "data": show.model_dump(mode="json")}
-        )
-
-        return show
+        try:
+            return self.show_repository.get_show(name)
+        except KeyError:
+            show = api.get_show(name)
+            self.show_repository.put_show(show)
+            return show
 
     def get_seasons(self, name):
-        show = self.get_show(name)
+        try:
+            show = self.get_show(name)
+            return self.season_repository.get_seasons(show.name)
+        except KeyError:
+            seasons = api.get_seasons(show.id)
+            self.season_repository.put_seasons(show.name, seasons)
 
-        response = self.table.query(
-            KeyConditionExpression=Key("name").eq(show.name)
-            & Key("sk").begins_with("SEASON#")
-        )
-
-        if response["Items"]:
-            return Seasons.validate_python([item["data"] for item in response["Items"]])
-
-        seasons = api.get_seasons(show.id)
-
-        with self.table.batch_writer() as batch:
-            for season in seasons:
-                batch.put_item(
-                    Item={
-                        "name": show.name,
-                        "sk": f"SEASON#{season.number}",
-                        "data": season.model_dump(mode="json"),
-                    }
-                )
-
-        return seasons
+            return seasons
 
     def get_episodes(self, name, season):
-        seasons = self.get_seasons(name)
+        try:
+            return self.episode_repository.get_episodes(name, season)
+        except KeyError:
+            seasons = self.get_seasons(name)
 
-        response = self.table.query(
-            KeyConditionExpression=Key("name").eq(name)
-            & Key("sk").begins_with(f"EPISODE#{season}#")
-        )
+            for s in seasons:
+                if s.number == season:
+                    episodes = api.get_episodes(s.id)
 
-        if response["Items"]:
-            return Episodes.validate_python(
-                [item["data"] for item in response["Items"]]
-            )
+                    self.episode_repository.put_episodes(name, s.number, episodes)
 
-        for s in seasons:
-            if s.number == season:
-                episodes = api.get_episodes(s.id)
-
-                with self.table.batch_writer() as batch:
-                    for episode in episodes:
-                        batch.put_item(
-                            Item={
-                                "name": name,
-                                "sk": f"EPISODE#{s.number}#{episode.number}",
-                                "data": episode.model_dump(mode="json"),
-                            }
-                        )
-                return episodes
+                    return episodes
         raise ValueError("Season number out of range for this show")
 
-    def delete_show(self, name):
+    """def delete_show(self, name):
         response = self.table.query(
             Key={
                 "name": name,
@@ -89,4 +57,4 @@ class Shows:
         with self.table.batch_writer() as batch:
             for item in response["Items"]:
                 batch.delete_item(Key={"name": item["name"], "sk": item["sk"]})
-        return response["Items"]
+        return response["Items"]"""
