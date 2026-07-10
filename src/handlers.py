@@ -1,5 +1,5 @@
+from middleware import api
 import os
-import urllib
 
 import boto3
 
@@ -13,33 +13,24 @@ table = dynamodb.Table(os.environ["TABLE_NAME"])
 shows_service = Shows(table)
 
 
-def shows(event, context):
-    raw_name = event["pathParameters"]["name"]
-    name = urllib.parse.unquote(raw_name).lower().strip()
-
-    return render(200, shows_service.get_show(name).model_dump_json())
+@api
+def shows(request, name):
+    return 200, shows_service.get_show(name).model_dump(mode="json")
 
 
-def seasons(event, context):
-    raw_name = event["pathParameters"]["name"]
-    name = urllib.parse.unquote(raw_name).lower().strip()
-
-    return render(200, Seasons.dump_json(shows_service.get_seasons(name)))
+@api
+def seasons(request, name):
+    return 200, Seasons.dump_python(shows_service.get_seasons(name), mode="json")
 
 
-def episodes(event, context):
-    raw_name = event["pathParameters"]["name"]
-    raw_season = event["pathParameters"]["season"]
-
-    name = urllib.parse.unquote(raw_name).lower().strip()
-    season = int(urllib.parse.unquote(raw_season).strip())
-
-    return render(200, Episodes.dump_json(shows_service.get_episodes(name, season)))
+@api
+def episodes(request, name, season):
+    return 200, Episodes.dump_python(
+        shows_service.get_episodes(name, season), mode="json"
+    )
 
 
-def delete_show(event, content):
-    raw_name = event["pathParameters"]["name"]
-    name = urllib.parse.unquote(raw_name).lower().strip()
-
-    shows_service.delete_show(name)
-    return render(204, "")
+@api
+def delete_show(request, name):
+    # shows_service.delete_show(name)
+    return 204, {}

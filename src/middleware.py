@@ -33,14 +33,12 @@ def api(fun):
             request, *args, **kwargs
         )  # todo write response model, validate, return str
 
-        return json.dumps(
-            {
-                "statusCode": response[0],
-                "headers": {
-                    "Content-Type": "application/json",
-                },
-                "body": response[1],
-            }
-        )
+        return {
+            "statusCode": response[0],
+            "headers": {
+                "Content-Type": "application/json",
+            },
+            "body": json.dumps(response[1]),
+        }
 
     return wrapper
