@@ -4,7 +4,7 @@ import boto3
 
 from moto import mock_aws
 
-from factories import ShowFactory
+from factories import ShowFactory, SeasonFactory
 
 
 @pytest.fixture
@@ -25,22 +25,6 @@ def dynamodb_table():
         )
         yield table
 
-
-@pytest.fixture
-def show(dynamodb_table):
-    item = ShowFactory.build()
-    dynamodb_table.put_item(
-        Item={"name": item.name, "sk": "SHOW", "data": item.model_dump(mode="json")}
-    )
-    yield item
-    dynamodb_table.delete_item(Key={"name": item.name, "sk": "SHOW"})
-
-
-@pytest.fixture
-def seasons(dynamodb_table):
-    pass
-
-
 @pytest.fixture
 def show_repo(dynamodb_table):
     yield ShowRepository(dynamodb_table)
@@ -54,3 +38,17 @@ def season_repo(dynamodb_table):
 @pytest.fixture
 def episode_repo(dynamodb_table):
     yield EpisodeRepository(dynamodb_table)
+
+@pytest.fixture
+def show(show_repo):
+    item = ShowFactory.build()
+    show_repo.put_show(item)
+    yield item
+
+
+@pytest.fixture
+def seasons(season_repo, show):
+    items = [SeasonFactory.build()]
+    season_repo.put_seasons(show.name, items)
+    yield items
+

@@ -156,6 +156,10 @@ class EpisodeFactory(factory.Factory):
 
     type = factory.Faker("word")
 
+    airdate = factory.Faker("date")
+    airtime = factory.Faker("time")
+    airstamp = factory.Faker("date_time")
+
     rating = factory.SubFactory(RatingFactory)
     image = factory.SubFactory(ImageFactory)
 

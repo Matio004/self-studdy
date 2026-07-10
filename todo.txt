@@ -1,0 +1,7 @@
+middleware
+walidacja
+errorhandling
+
+modularyzacja terraform
+
+aws cli do wysyłania plików

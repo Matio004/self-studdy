@@ -13,6 +13,7 @@ terraform.rc
 .terraform/
 .terraform.lock.hcl
 
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

@@ -35,12 +35,12 @@ class SeasonRepository:
             return Seasons.validate_python([item["data"] for item in response["Items"]])
         raise KeyError("Show`s seasons not found")
 
-    def put_seasons(self, show, seasons):
+    def put_seasons(self, name, seasons):
         with self.table.batch_writer() as batch:
             for season in seasons:
                 batch.put_item(
                     Item={
-                        "name": show.name,
+                        "name": name,
                         "sk": f"SEASON#{season.number}",
                         "data": season.model_dump(mode="json"),
                     }
@@ -54,12 +54,13 @@ class EpisodeRepository:
     def get_episodes(self, name, season):
         response = self.table.query(
             KeyConditionExpression=Key("name").eq(name)
-            & Key("sk").begins_with(f"value=EPISODE#{season}#")
+            & Key("sk").begins_with(f"EPISODE#{season}#")
         )
         if response["Items"]:
             return Episodes.validate_python(
                 [item["data"] for item in response["Items"]]
             )
+        raise KeyError("Seasons' episodes not found")
 
     def put_episodes(self, name, season, episodes):
         with self.table.batch_writer() as batch:
