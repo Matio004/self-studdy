@@ -1,8 +1,6 @@
 from repository import ShowRepository, SeasonRepository, EpisodeRepository
-from boto3.dynamodb.conditions import Key
 
 import api
-from model import Episodes, Show, Seasons
 
 
 class Shows:

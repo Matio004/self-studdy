@@ -5,7 +5,6 @@ import boto3
 
 from model import Episodes, Seasons
 from services import Shows
-from utlis import render
 
 dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table(os.environ["TABLE_NAME"])
@@ -24,7 +23,7 @@ def seasons(request, name):
 
 
 @api
-def episodes(request, name, season):
+def episodes(request, name, season: int):
     return 200, Episodes.dump_python(
         shows_service.get_episodes(name, season), mode="json"
     )

@@ -6,7 +6,7 @@ from typing import get_type_hints
 
 PARSERS = {
     int: lambda x: int(x.strip()),
-    str: lambda x: urllib.parse.unquote(x).lower().strip(),
+    str: lambda x: urllib.parse.unquote(x).strip(),
 }
 
 
