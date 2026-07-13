@@ -1,3 +1,4 @@
+from exceptions import DomainException, RepositoryException, ExternalServiceException
 from serializers import Response
 import json
 import urllib.parse
@@ -28,11 +29,20 @@ def api(fun):
 
                 if hint not in PARSERS:
                     raise TypeError("Unknown type for path parameter")
+                # TODO handle parsing exceptions
                 kwargs[name] = PARSERS[hint](path_params[name])
         request = None  # warn rite tequest
-        response = fun(
-            request, *args, **kwargs
-        )  # todo write response model, validate, return str
+
+        try:
+            response = fun(
+                request, *args, **kwargs
+            )  # todo write response model, validate, return str
+        except DomainException as e:
+            response = 404, {"message": str(e)}
+        except RepositoryException as e:
+            response = 500, {"message": str(e)}
+        except ExternalServiceException as e:
+            response = 404, {"message": str(e)}
 
         return Response.model_validate(
             {
@@ -42,6 +52,6 @@ def api(fun):
                 },
                 "body": json.dumps(response[1]),
             }
-        )
+        ).model_dump(by_alias=True)
 
     return wrapper

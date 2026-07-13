@@ -1,3 +1,4 @@
+from exceptions import NotFoundException, DomainException
 from repository import ShowRepository, SeasonRepository, EpisodeRepository
 
 import api
@@ -12,7 +13,7 @@ class Shows:
     def get_show(self, name):
         try:
             return self.show_repository.get_show(name)
-        except KeyError:
+        except NotFoundException:
             show = api.get_show(name)
             self.show_repository.put_show(show)
             return show
@@ -21,7 +22,7 @@ class Shows:
         try:
             show = self.get_show(name)
             return self.season_repository.get_seasons(show.name)
-        except KeyError:
+        except NotFoundException:
             seasons = api.get_seasons(show.id)
             self.season_repository.put_seasons(show.name, seasons)
 
@@ -30,7 +31,7 @@ class Shows:
     def get_episodes(self, name, season):
         try:
             return self.episode_repository.get_episodes(name, season)
-        except KeyError:
+        except NotFoundException:
             seasons = self.get_seasons(name)
 
             for s in seasons:
@@ -40,7 +41,7 @@ class Shows:
                     self.episode_repository.put_episodes(name, s.number, episodes)
 
                     return episodes
-        raise ValueError("Season number out of range for this show")
+        raise DomainException("Season number out of range for this show")
 
     """def delete_show(self, name):
         response = self.table.query(

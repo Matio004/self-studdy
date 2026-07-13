@@ -1,7 +1,7 @@
-middleware
-walidacja
-errorhandling
+- [x] middleware
+- [ ] walidacja
+- [ ] errorhandling
 
-modularyzacja terraform
+- [x] modularyzacja terraform
 
-aws cli do wysyłania plików
+- [ ] aws cli do wysyłania plików

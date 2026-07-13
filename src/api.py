@@ -1,3 +1,4 @@
+from requests.exceptions import HTTPError
 from exceptions import TvMazeException
 import requests
 
@@ -12,7 +13,10 @@ def get_show(name):
     if response.ok:
         return Show.model_validate(response.json())
 
-    raise TvMazeException() from response.raise_for_status()  # todo proper error handling
+    try:
+        response.raise_for_status()
+    except HTTPError as e:
+        raise TvMazeException("Show not found") from e  # todo proper error handling
 
 
 def get_seasons(id):
@@ -21,7 +25,10 @@ def get_seasons(id):
     if response.ok:
         return Seasons.validate_python(response.json())
 
-    raise TvMazeException() from response.raise_for_status()  # todo proper error handling
+    try:
+        response.raise_for_status()
+    except HTTPError as e:
+        raise TvMazeException("Show not found") from e  # todo proper error handling
 
 
 def get_episodes(id):
@@ -30,5 +37,8 @@ def get_episodes(id):
     if response.ok:
         return Episodes.validate_python(response.json())
 
-    raise TvMazeException() from response.raise_for_status()  # todo proper error handling
+    try:
+        response.raise_for_status()
+    except HTTPError as e:
+        raise TvMazeException("Season not found") from e  # todo proper error handling
 
