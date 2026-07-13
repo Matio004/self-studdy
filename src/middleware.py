@@ -1,3 +1,4 @@
+from serializers import Response
 import json
 import urllib.parse
 import inspect
@@ -33,12 +34,14 @@ def api(fun):
             request, *args, **kwargs
         )  # todo write response model, validate, return str
 
-        return {
-            "statusCode": response[0],
-            "headers": {
-                "Content-Type": "application/json",
-            },
-            "body": json.dumps(response[1]),
-        }
+        return Response.model_validate(
+            {
+                "statusCode": response[0],
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "body": json.dumps(response[1]),
+            }
+        )
 
     return wrapper

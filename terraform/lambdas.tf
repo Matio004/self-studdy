@@ -1,8 +1,8 @@
-resource "aws_lambda_function" "hello" {
-  function_name = "hello_lambda"
+module "hello" {
+  source = "./modules/lambda"
 
-  filename         = data.archive_file.lambda_hello.output_path
-  source_code_hash = data.archive_file.lambda_hello.output_base64sha256
+  function_name = "hello_lambda"
+  filename      = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
   handler = "handlers.shows"
@@ -12,29 +12,20 @@ resource "aws_lambda_function" "hello" {
     aws_lambda_layer_version.python_dependencies.arn
   ]
 
-  environment {
-    variables = {
-      TABLE_NAME = aws_dynamodb_table.series_by_name.name
-    }
+  enviroment_variables = {
+    TABLE_NAME = aws_dynamodb_table.series_by_name.name
   }
+
+  api_gateway_id            = aws_apigatewayv2_api.api.id
+  api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
 }
 
-resource "aws_lambda_function" "users" {
-  function_name = "users-api"
+module "seasons" {
+  source = "./modules/lambda"
 
-  filename         = data.archive_file.lambda_hello.output_path
-  source_code_hash = data.archive_file.lambda_hello.output_base64sha256
-
-  role    = aws_iam_role.lambda_role.arn
-  handler = "users.handler"
-  runtime = "python3.12"
-}
-
-resource "aws_lambda_function" "seasons" {
   function_name = "seasons"
 
-  filename         = data.archive_file.lambda_hello.output_path
-  source_code_hash = data.archive_file.lambda_hello.output_base64sha256
+  filename = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
   handler = "handlers.seasons"
@@ -44,18 +35,20 @@ resource "aws_lambda_function" "seasons" {
     aws_lambda_layer_version.python_dependencies.arn
   ]
 
-  environment {
-    variables = {
-      TABLE_NAME = aws_dynamodb_table.series_by_name.name
-    }
+  enviroment_variables = {
+    TABLE_NAME = aws_dynamodb_table.series_by_name.name
   }
+
+  api_gateway_id            = aws_apigatewayv2_api.api.id
+  api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
 }
 
-resource "aws_lambda_function" "episodes" {
+module "episodes" {
+  source = "./modules/lambda"
+
   function_name = "episodes"
 
-  filename         = data.archive_file.lambda_hello.output_path
-  source_code_hash = data.archive_file.lambda_hello.output_base64sha256
+  filename = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
   handler = "handlers.episodes"
@@ -65,18 +58,20 @@ resource "aws_lambda_function" "episodes" {
     aws_lambda_layer_version.python_dependencies.arn
   ]
 
-  environment {
-    variables = {
-      TABLE_NAME = aws_dynamodb_table.series_by_name.name
-    }
+  enviroment_variables = {
+    TABLE_NAME = aws_dynamodb_table.series_by_name.name
   }
+
+  api_gateway_id            = aws_apigatewayv2_api.api.id
+  api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
 }
 
-resource "aws_lambda_function" "delete_show" {
+module "delete_show" {
+  source = "./modules/lambda"
+
   function_name = "delete_show"
 
-  filename         = data.archive_file.lambda_hello.output_path
-  source_code_hash = data.archive_file.lambda_hello.output_base64sha256
+  filename = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
   handler = "handlers.delete_show"
@@ -86,9 +81,10 @@ resource "aws_lambda_function" "delete_show" {
     aws_lambda_layer_version.python_dependencies.arn
   ]
 
-  environment {
-    variables = {
-      TABLE_NAME = aws_dynamodb_table.series_by_name.name
-    }
+  enviroment_variables = {
+    TABLE_NAME = aws_dynamodb_table.series_by_name.name
   }
+
+  api_gateway_id            = aws_apigatewayv2_api.api.id
+  api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
 }

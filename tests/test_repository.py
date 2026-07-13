@@ -1,3 +1,4 @@
+from exceptions import NotFoundException
 from repository import EpisodeRepository
 import pytest
 
@@ -5,7 +6,7 @@ from factories import ShowFactory, SeasonFactory, EpisodeFactory
 
 
 def test_show_repository(show_repo):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundException):
         show_repo.get_show("name")
 
     show = ShowFactory.build()
@@ -15,7 +16,7 @@ def test_show_repository(show_repo):
 
 
 def test_season_repository(season_repo, show):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundException):
         season_repo.get_seasons("name")
 
     seasons = [SeasonFactory.build(), SeasonFactory.build()]
@@ -27,7 +28,7 @@ def test_season_repository(season_repo, show):
 
 
 def test_episode_repository(episode_repo, show, seasons):
-    with pytest.raises(KeyError):
+    with pytest.raises(NotFoundException):
         episode_repo.get_episodes("name", 1)
 
     episodes = [EpisodeFactory.build(), EpisodeFactory.build()]

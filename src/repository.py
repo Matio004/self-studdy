@@ -1,3 +1,4 @@
+from exceptions import NotFoundException
 from model import Show, Seasons, Episodes
 from boto3.dynamodb.conditions import Key
 
@@ -10,7 +11,7 @@ class ShowRepository:
         item = self.table.get_item(Key={"name": name, "sk": "SHOW"})
         if "Item" in item:
             return Show.model_validate(item["Item"]["data"])
-        raise KeyError("Show not found")
+        raise NotFoundException("Show not found")
 
     def put_show(self, show):
         self.table.put_item(
@@ -33,7 +34,7 @@ class SeasonRepository:
 
         if response["Items"]:
             return Seasons.validate_python([item["data"] for item in response["Items"]])
-        raise KeyError("Show`s seasons not found")
+        raise NotFoundException("Show`s seasons not found")
 
     def put_seasons(self, name, seasons):
         with self.table.batch_writer() as batch:
@@ -60,7 +61,7 @@ class EpisodeRepository:
             return Episodes.validate_python(
                 [item["data"] for item in response["Items"]]
             )
-        raise KeyError("Seasons' episodes not found")
+        raise NotFoundException("Seasons' episodes not found")
 
     def put_episodes(self, name, season, episodes):
         with self.table.batch_writer() as batch:
