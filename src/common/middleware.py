@@ -1,4 +1,4 @@
-from .exceptions import AppException
+from .exceptions import AppException, DomainException
 
 from .serializers import Response
 import json
@@ -18,23 +18,26 @@ def api(fun):
     hints = get_type_hints(fun)
 
     def wrapper(event, context, *args, **kwargs):
-        path_params = event.get("pathParameters", {})
-
-        kwargs = {}
-
-        for name in sig.parameters:
-            if "request".startswith(name):
-                continue
-            if name in path_params:
-                hint = hints.get(name, str)
-
-                if hint not in PARSERS:
-                    raise TypeError("Unknown type for path parameter")
-                # TODO handle parsing exceptions
-                kwargs[name] = PARSERS[hint](path_params[name])
-        request = None  # warn rite tequest
 
         try:
+            path_params = event.get("pathParameters", {})
+            kwargs = {}
+
+            for name in sig.parameters:
+                if "request".startswith(name):
+                    continue
+                if name in path_params:
+                    hint = hints.get(name, str)
+
+                    if hint not in PARSERS:
+                        raise TypeError("Unknown type for path parameter")
+                    # TODO handle parsing exceptions
+                    try:
+                        kwargs[name] = PARSERS[hint](path_params[name])
+                    except ValueError:
+                        raise DomainException(f"{name} should be {hint}")
+            request = None  # warn rite tequest
+
             response = fun(
                 request, *args, **kwargs
             )  # todo write response model, validate, return str
