@@ -1,7 +1,7 @@
-from exceptions import NotFoundException, DomainException
-from repository import ShowRepository, SeasonRepository, EpisodeRepository
+from .exceptions import NotFoundException, DomainException
+from .repository import ShowRepository, SeasonRepository, EpisodeRepository
 
-import api
+from . import api
 
 
 class Shows:

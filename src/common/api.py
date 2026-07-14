@@ -1,8 +1,7 @@
-from requests.exceptions import HTTPError
-from exceptions import TvMazeException
 import requests
-
-from model import Episodes, Show, Seasons
+from .exceptions import TvMazeException
+from .model import Episodes, Seasons, Show
+from requests.exceptions import HTTPError
 
 
 def get_show(name):
@@ -41,4 +40,3 @@ def get_episodes(id):
         response.raise_for_status()
     except HTTPError as e:
         raise TvMazeException("Season not found") from e  # todo proper error handling
-

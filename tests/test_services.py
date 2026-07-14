@@ -1,7 +1,7 @@
 import pytest
 
 from conftest import dynamodb_table, show, seasons
-from services import Shows
+from common.services import Shows
 
 
 def test_get_show(dynamodb_table, show):

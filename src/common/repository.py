@@ -1,5 +1,5 @@
-from exceptions import NotFoundException
-from model import Show, Seasons, Episodes
+from .exceptions import NotFoundException
+from .model import Show, Seasons, Episodes
 from boto3.dynamodb.conditions import Key
 
 

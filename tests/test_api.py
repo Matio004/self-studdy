@@ -1,8 +1,8 @@
-from exceptions import TvMazeException
+from common.exceptions import TvMazeException
 import pytest
 from logging import getLogger
 
-from api import get_episodes, get_show, get_seasons
+from common.api import get_episodes, get_show, get_seasons
 
 logger = getLogger(__name__)
 

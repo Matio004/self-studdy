@@ -1,5 +1,5 @@
-from exceptions import NotFoundException
-from repository import EpisodeRepository
+from common.exceptions import NotFoundException
+from common.repository import EpisodeRepository
 import pytest
 
 from factories import ShowFactory, SeasonFactory, EpisodeFactory

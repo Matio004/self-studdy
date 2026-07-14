@@ -1,4 +1,4 @@
-from repository import ShowRepository, SeasonRepository, EpisodeRepository
+from common.repository import ShowRepository, SeasonRepository, EpisodeRepository
 import pytest
 import boto3
 
@@ -25,6 +25,7 @@ def dynamodb_table():
         )
         yield table
 
+
 @pytest.fixture
 def show_repo(dynamodb_table):
     yield ShowRepository(dynamodb_table)
@@ -39,6 +40,7 @@ def season_repo(dynamodb_table):
 def episode_repo(dynamodb_table):
     yield EpisodeRepository(dynamodb_table)
 
+
 @pytest.fixture
 def show(show_repo):
     item = ShowFactory.build()
@@ -51,4 +53,3 @@ def seasons(season_repo, show):
     items = [SeasonFactory.build()]
     season_repo.put_seasons(show.name, items)
     yield items
-

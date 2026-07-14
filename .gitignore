@@ -25,3 +25,4 @@ terraform.rc
 *.zip
 layer
 __pycache__
+.build

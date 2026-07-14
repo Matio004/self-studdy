@@ -1,15 +1,16 @@
 module "hello" {
   source = "./modules/lambda"
 
-  function_name = "hello_lambda"
+  function_name = "get_show"
   filename      = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
-  handler = "handlers.shows"
+  handler = "handler.lambda_handler"
   runtime = "python3.12"
 
   layers = [
-    aws_lambda_layer_version.python_dependencies.arn
+    aws_lambda_layer_version.python_dependencies.arn,
+    aws_lambda_layer_version.common.arn
   ]
 
   enviroment_variables = {
@@ -23,16 +24,17 @@ module "hello" {
 module "seasons" {
   source = "./modules/lambda"
 
-  function_name = "seasons"
+  function_name = "get_seasons"
 
   filename = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
-  handler = "handlers.seasons"
+  handler = "handler.lambda_handler"
   runtime = "python3.12"
 
   layers = [
-    aws_lambda_layer_version.python_dependencies.arn
+    aws_lambda_layer_version.python_dependencies.arn,
+    aws_lambda_layer_version.common.arn
   ]
 
   enviroment_variables = {
@@ -46,16 +48,17 @@ module "seasons" {
 module "episodes" {
   source = "./modules/lambda"
 
-  function_name = "episodes"
+  function_name = "get_episodes"
 
   filename = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
-  handler = "handlers.episodes"
+  handler = "handler.lambda_handler"
   runtime = "python3.12"
 
   layers = [
-    aws_lambda_layer_version.python_dependencies.arn
+    aws_lambda_layer_version.python_dependencies.arn,
+    aws_lambda_layer_version.common.arn
   ]
 
   enviroment_variables = {
@@ -74,11 +77,12 @@ module "delete_show" {
   filename = data.archive_file.lambda_hello.output_path
 
   role    = aws_iam_role.lambda_role.arn
-  handler = "handlers.delete_show"
+  handler = "handler.lambda_handler"
   runtime = "python3.12"
 
   layers = [
-    aws_lambda_layer_version.python_dependencies.arn
+    aws_lambda_layer_version.python_dependencies.arn,
+    aws_lambda_layer_version.common.arn
   ]
 
   enviroment_variables = {

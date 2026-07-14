@@ -1,7 +1,7 @@
 import random
 
 import factory
-import model
+from common import model
 
 
 class CountryFactory(factory.Factory):
