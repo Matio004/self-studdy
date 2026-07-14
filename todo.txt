@@ -4,4 +4,4 @@
 
 - [x] modularyzacja terraform
 
-- [ ] aws cli do wysyłania plików
+- [x] aws cli do wysyłania plików

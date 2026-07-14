@@ -1,3 +1,4 @@
+from boto3.dynamodb.conditions import Key
 from .exceptions import NotFoundException, DomainException
 from .repository import ShowRepository, SeasonRepository, EpisodeRepository
 
@@ -6,6 +7,7 @@ from . import api
 
 class Shows:
     def __init__(self, table):
+        self.table = table
         self.show_repository = ShowRepository(table)
         self.season_repository = SeasonRepository(table)
         self.episode_repository = EpisodeRepository(table)
@@ -43,17 +45,15 @@ class Shows:
                     return episodes
         raise DomainException("Season number out of range for this show")
 
-    """def delete_show(self, name):
+    def delete_show(self, name):
         response = self.table.query(
-            Key={
-                "name": name,
-            }
+            KeyConditionExpression=Key("name").eq(name)
         )  # todo może zwrócić tylko część, użyć
 
-        if "Item" not in response:
-            raise KeyError("There is to show of such name.")
+        if not response["Items"]:
+            raise NotFoundException("There is to show of such name.")
 
         with self.table.batch_writer() as batch:
             for item in response["Items"]:
                 batch.delete_item(Key={"name": item["name"], "sk": item["sk"]})
-        return response["Items"]"""
+        return response["Items"]
