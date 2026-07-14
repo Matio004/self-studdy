@@ -1,4 +1,5 @@
-from .exceptions import DomainException, RepositoryException, ExternalServiceException
+from .exceptions import AppException
+
 from .serializers import Response
 import json
 import urllib.parse
@@ -37,12 +38,8 @@ def api(fun):
             response = fun(
                 request, *args, **kwargs
             )  # todo write response model, validate, return str
-        except DomainException as e:
-            response = 404, {"message": str(e)}
-        except RepositoryException as e:
-            response = 500, {"message": str(e)}
-        except ExternalServiceException as e:
-            response = 404, {"message": str(e)}
+        except AppException as e:
+            response = e.status_code, {"message": str(e)}
 
         return Response.model_validate(
             {
