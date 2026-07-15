@@ -45,7 +45,7 @@ def api(body=None, path_param=None, query_params=None):
                     {
                         "path_params": event.get("pathParameters"),
                         "query_params": event.get("queryParameters"),
-                        "body": json.loads(event.get("body")),
+                        "body": json.loads(event.get("body", "null")),
                     }
                 )  # warn rite tequest
 

@@ -15,10 +15,6 @@ variable "runtime" {
   type = string
 }
 
-variable "role" {
-  type = string
-}
-
 variable "layers" {
   type    = list(string)
   default = []
@@ -34,5 +30,13 @@ variable "api_gateway_id" {
 }
 
 variable "api_gateway_execution_arn" {
+  type = string
+}
+
+variable "dynamo_actions" {
+  type = list(string)
+}
+
+variable "dynamo_table_arn" {
   type = string
 }

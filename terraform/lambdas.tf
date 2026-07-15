@@ -4,7 +4,10 @@ module "hello" {
   function_name = "get_show"
   filename      = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:GetItem",
+    "dynamodb:PutItem"
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -19,6 +22,8 @@ module "hello" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 
 module "seasons" {
@@ -28,7 +33,12 @@ module "seasons" {
 
   filename = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:GetItem",
+    "dynamodb:Query",
+    "dynamodb:PutItem",
+    "dynamodb:BatchWriteItem"
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -43,6 +53,8 @@ module "seasons" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 
 module "episodes" {
@@ -52,7 +64,13 @@ module "episodes" {
 
   filename = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:GetItem",
+    "dynamodb:Query",
+    "dynamodb:PutItem",
+    "dynamodb:BatchWriteItem"
+
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -67,6 +85,8 @@ module "episodes" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 
 module "delete_show" {
@@ -76,7 +96,12 @@ module "delete_show" {
 
   filename = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:Query",
+    "dynamodb:DeleteItem",
+    "dynamodb:BatchWriteItem"
+
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -91,6 +116,8 @@ module "delete_show" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 module "create_show" {
   source = "./modules/lambda"
@@ -98,7 +125,9 @@ module "create_show" {
   function_name = "post_show"
   filename      = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:PutItem"
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -113,6 +142,8 @@ module "create_show" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 
 
@@ -122,7 +153,11 @@ module "create_season" {
   function_name = "post_season"
   filename      = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:GetItem",
+    "dynamodb:PutItem",
+    "dynamodb:BatchWriteItem"
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -137,6 +172,8 @@ module "create_season" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 
 
@@ -146,7 +183,11 @@ module "create_episode" {
   function_name = "post_episode"
   filename      = data.archive_file.lambda_hello.output_path
 
-  role    = aws_iam_role.lambda_role.arn
+  dynamo_actions = [
+    "dynamodb:GetItem",
+    "dynamodb:PutItem",
+    "dynamodb:BatchWriteItem"
+  ]
   handler = "handler.lambda_handler"
   runtime = "python3.12"
 
@@ -161,6 +202,8 @@ module "create_episode" {
 
   api_gateway_id            = aws_apigatewayv2_api.api.id
   api_gateway_execution_arn = aws_apigatewayv2_api.api.execution_arn
+
+  dynamo_table_arn = aws_dynamodb_table.series_by_name.arn
 }
 
 
