@@ -21,3 +21,22 @@ resource "aws_apigatewayv2_route" "delete_show" {
   route_key = "DELETE /shows/{name}"
   target    = "integrations/${module.delete_show.integration_id}"
 }
+
+resource "aws_apigatewayv2_route" "post_show" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /shows"
+  target    = "integrations/${module.create_show.integration_id}"
+}
+
+resource "aws_apigatewayv2_route" "post_season" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /shows/{name}/seasons"
+  target    = "integrations/${module.create_season.integration_id}"
+}
+
+resource "aws_apigatewayv2_route" "post_episode" {
+  api_id    = aws_apigatewayv2_api.api.id
+  route_key = "POST /shows/{name}/seasons/{season}"
+  target    = "integrations/${module.create_episode.integration_id}"
+}
+

@@ -8,6 +8,9 @@ output "lambda_functions" {
     get_seasons  = module.seasons.function_name
     get_episodes = module.episodes.function_name
     delete_show  = module.delete_show.function_name
+    post_show    = module.create_show.function_name
+    post_season  = module.create_season.function_name
+    post_episode = module.create_episode.function_name
   }
 }
 

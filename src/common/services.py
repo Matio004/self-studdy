@@ -57,3 +57,23 @@ class Shows:
             for item in response["Items"]:
                 batch.delete_item(Key={"name": item["name"], "sk": item["sk"]})
         return response["Items"]
+
+    def put_show(self, show):
+        return self.show_repository.put_show(show)
+
+    def put_season(self, name, season):
+        try:
+            self.show_repository.get_show(name)
+        except NotFoundException:
+            raise DomainException("You cant add season to non existing show")
+        else:
+            return self.season_repository.put_season(name, season)
+
+    def put_episode(self, name, season, episode):
+        try:
+            self.show_repository.get_show(name)
+            self.season_repository.get_season(name, season)
+        except NotFoundException:
+            raise DomainException("You cant add episode to non existing show/season")
+        else:
+            return self.episode_repository.put_episode(name, season, episode)

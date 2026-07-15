@@ -1,6 +1,6 @@
 - [x] middleware
-- [ ] walidacja
-- [ ] errorhandling
+- [x] walidacja
+- [x] errorhandling
 
 - [x] modularyzacja terraform
 

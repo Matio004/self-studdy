@@ -1,10 +1,11 @@
 from common.serializers import GetEpisodesPathParams
+from common.model import Episode
 import os
 import boto3
 
 from common.middleware import api
-from common.model import Episodes
 from common.services import Shows
+
 
 dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table(os.environ["TABLE_NAME"])
@@ -12,8 +13,6 @@ table = dynamodb.Table(os.environ["TABLE_NAME"])
 shows_service = Shows(table)
 
 
-@api(path_param=GetEpisodesPathParams)
+@api(Episode, GetEpisodesPathParams)
 def lambda_handler(request, name, season: int):
-    return 200, Episodes.dump_python(
-        shows_service.get_episodes(name, season), mode="json"
-    )
+    return 200, shows_service.put_episode(name, season, request.body)
