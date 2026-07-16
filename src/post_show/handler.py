@@ -14,4 +14,4 @@ shows_service = Shows(table)
 
 @api(Show)
 def lambda_handler(request):
-    return 200, shows_service.put_show(request.body)
+    return 201, shows_service.put_show(request.body)

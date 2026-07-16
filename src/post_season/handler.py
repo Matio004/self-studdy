@@ -15,4 +15,4 @@ shows_service = Shows(table)
 
 @api(Season, ShowNamePathParam)
 def lambda_handler(request, name):
-    return 200, shows_service.put_season(name, request.body)
+    return 201, shows_service.put_season(name, request.body)
