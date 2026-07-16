@@ -40,3 +40,7 @@ variable "dynamo_actions" {
 variable "dynamo_table_arn" {
   type = string
 }
+
+variable "route_key" {
+  type = string
+}

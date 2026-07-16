@@ -73,3 +73,9 @@ resource "aws_iam_role_policy_attachment" "this_ddb" {
   role       = aws_iam_role.this.name
   policy_arn = aws_iam_policy.this.arn
 }
+
+resource "aws_apigatewayv2_route" "this" {
+  api_id    = var.api_gateway_id
+  route_key = var.route_key
+  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+}

@@ -1,4 +1,5 @@
-from .exceptions import AppException, DomainException
+from pydantic import ValidationError
+from .exceptions import AppException, DomainException, pydantic_error_to_dict
 
 from .serializers import Response, create_request_model
 import json
@@ -41,6 +42,7 @@ def api(body=None, path_param=None, query_params=None):
                             kwargs[name] = PARSERS[hint](path_params[name])
                         except ValueError:
                             raise DomainException(f"{name} should be {hint}")
+
                 request = request_model.model_validate(
                     {
                         "path_params": event.get("pathParameters"),
@@ -54,6 +56,8 @@ def api(body=None, path_param=None, query_params=None):
                 )  # todo write response model, validate, return str
             except AppException as e:
                 response = e.status_code, {"message": str(e)}
+            except ValidationError as e:
+                response = 404, pydantic_error_to_dict(e)
 
             return Response.model_validate(
                 {

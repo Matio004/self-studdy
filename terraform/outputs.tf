@@ -4,14 +4,10 @@ output "api_url" {
 
 output "lambda_functions" {
   value = {
-    get_show     = module.hello.function_name
-    get_seasons  = module.seasons.function_name
-    get_episodes = module.episodes.function_name
-    delete_show  = module.delete_show.function_name
-    post_show    = module.create_show.function_name
-    post_season  = module.create_season.function_name
-    post_episode = module.create_episode.function_name
+    for name, module_instance in module.lambda :
+    name => module_instance.function_name
   }
+
 }
 
 output "common_layer_name" {

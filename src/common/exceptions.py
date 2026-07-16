@@ -1,3 +1,7 @@
+from collections import defaultdict
+from pydantic import ValidationError
+
+
 class AppException(Exception):
     """Root of exception tree"""
 
@@ -38,3 +42,11 @@ class TvMazeException(ExternalServiceException):
 
 class TvMazeRateLimitException(ExternalServiceException):
     """Slow down, to many requests"""
+
+
+def pydantic_error_to_dict(e: ValidationError) -> dict:
+    result = defaultdict(list)
+
+    for err in e.errors():
+        result[".".join(map(str, err["loc"]))].append(err["msg"])
+    return result
