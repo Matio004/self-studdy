@@ -5,3 +5,11 @@
 - [x] modularyzacja terraform
 
 - [x] aws cli do wysyłania plików
+
+
+- [ ] logowanie json
+- [ ] przetwrzanie
+- [ ] testy
+- [ ] merge lsi
+- data res iam pol doc
+- strict
