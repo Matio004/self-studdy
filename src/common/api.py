@@ -1,7 +1,10 @@
+from . import logging
 import requests
 from .exceptions import TvMazeException
 from .model import Episodes, Seasons, Show
 from requests.exceptions import HTTPError
+
+logger = logging.getLogger(__name__)
 
 
 def get_show(name):
@@ -15,6 +18,7 @@ def get_show(name):
     try:
         response.raise_for_status()
     except HTTPError as e:
+        logger.warning("Show not found")
         raise TvMazeException("Show not found") from e  # todo proper error handling
 
 
@@ -27,7 +31,8 @@ def get_seasons(id):
     try:
         response.raise_for_status()
     except HTTPError as e:
-        raise TvMazeException("Show not found") from e  # todo proper error handling
+        logger.warning("Season not found")
+        raise TvMazeException("Season not found") from e  # todo proper error handling
 
 
 def get_episodes(id):
@@ -39,4 +44,5 @@ def get_episodes(id):
     try:
         response.raise_for_status()
     except HTTPError as e:
-        raise TvMazeException("Season not found") from e  # todo proper error handling
+        logger.warning("Epsiode not found")
+        raise TvMazeException("Episode not found") from e  # todo proper error handling

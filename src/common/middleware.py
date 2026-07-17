@@ -1,3 +1,4 @@
+from . import logging
 from pydantic import ValidationError
 from .exceptions import AppException, DomainException, pydantic_error_to_dict
 
@@ -7,6 +8,7 @@ import urllib.parse
 import inspect
 from typing import get_type_hints
 
+logger = logging.getLogger(__name__)
 
 PARSERS = {
     int: lambda x: int(x.strip()),
@@ -36,11 +38,13 @@ def api(body=None, path_param=None, query_params=None):
                         hint = hints.get(name, str)
 
                         if hint not in PARSERS:
+                            logger.error("Unknown type for path parameter")
                             raise TypeError("Unknown type for path parameter")
                         # TODO handle parsing exceptions
                         try:
                             kwargs[name] = PARSERS[hint](path_params[name])
                         except ValueError:
+                            logger.warning("%s should be %s", name, hint.__name__)
                             raise DomainException(f"{name} should be {hint}")
 
                 request = request_model.model_validate(
