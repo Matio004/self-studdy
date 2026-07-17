@@ -7,9 +7,9 @@
 - [x] aws cli do wysyłania plików
 
 
-- [ ] logowanie json
+- [x] logowanie json
 - [ ] przetwrzanie
 - [ ] testy
-- [ ] merge lsi
+- [-] merge lsi
 - data res iam pol doc
-- strict
+- strict - problem z decimal

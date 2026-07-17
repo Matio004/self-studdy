@@ -22,9 +22,15 @@ def test_seasons():
     assert seasons
     assert seasons[0].number == 1
 
+    with pytest.raises(TvMazeException):
+        get_seasons(-1)
+
 
 def test_episodes():
     episodes = get_episodes(554)
 
     assert episodes
     assert episodes[0].number == 1
+
+    with pytest.raises(TvMazeException):
+        get_episodes(-1)

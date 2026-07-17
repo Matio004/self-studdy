@@ -4,7 +4,7 @@ import boto3
 
 from moto import mock_aws
 
-from factories import ShowFactory, SeasonFactory
+from .factories import ShowFactory, SeasonFactory
 
 
 @pytest.fixture

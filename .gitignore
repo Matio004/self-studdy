@@ -26,3 +26,5 @@ terraform.rc
 layer
 __pycache__
 .build
+
+table.json

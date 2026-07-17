@@ -2,7 +2,7 @@ from common.exceptions import NotFoundException
 from common.repository import EpisodeRepository
 import pytest
 
-from factories import ShowFactory, SeasonFactory, EpisodeFactory
+from .factories import ShowFactory, SeasonFactory, EpisodeFactory
 
 
 def test_show_repository(show_repo):

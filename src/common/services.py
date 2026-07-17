@@ -3,6 +3,7 @@ from boto3.dynamodb.conditions import Key
 from .exceptions import NotFoundException, DomainException
 from .repository import ShowRepository, SeasonRepository, EpisodeRepository
 
+
 from . import api
 
 logger = logging.getLogger(__name__)
